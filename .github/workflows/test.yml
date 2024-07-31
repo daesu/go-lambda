@@ -1,0 +1,46 @@
+name: service CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx (Ubuntu)
+      uses: docker/setup-buildx-action@v1
+
+    - name: Set up QEMU (Ubuntu)
+      uses: docker/setup-qemu-action@v1
+
+    - name: Install Docker Compose (Ubuntu)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
+    - name: Check Docker version
+      run: docker --version
+
+    - name: Check Docker Compose version
+      run: docker-compose --version
+
+    - name: Run Makefile setup target
+      run: make setup
+
+    - name: Run Makefile build target
+      run: make build
+
+    - name: Run Makefile tests target
+      run: make run-tests

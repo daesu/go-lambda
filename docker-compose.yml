@@ -1,0 +1,28 @@
+version: "3.5"
+services:
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - .:/opt/app
+
+  terraform_go:
+    extends:
+      service: base
+    command: sh -c "cd /opt/app && terraform init"
+
+  service:
+    extends:
+      service: base
+    command: sh -c "cd /opt/app && go run main.go"
+    ports:
+      - "8081:8081"
+
+  test:
+    extends:
+      service: base
+    command: sh -c "cd /opt/app && go test -v ./..."
+
