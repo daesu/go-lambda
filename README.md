@@ -8,7 +8,7 @@ Can be run through `go` directly or through `make` & `docker-compose`.
 
 ## Local
 
-Create a `.env` file by copying the contents of `.env.example` and optionally adding values.
+Create a `.env` file by copying the contents of `.env.default` and optionally adding values.
 
 ```
 make build
